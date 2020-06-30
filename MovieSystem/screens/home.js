@@ -5,15 +5,19 @@ import {FontAwesome5, Faether, MaterialIcons} from '@expo/vector-icons'
 import list from './data.js'
 import gallery from './data.js'
 
-const Home = () => {
+import Watch from './watch.js';
+
+
+const Home = ({navigation}) => {
 
    const [background, setBackground] = useState(
         { 
-          uri: 'https://lh3.googleusercontent.com/XDg-bt655am_Q-7X-I0s64Kq8SJKfb7BBTHkUVbFR6-zDNv9J7rW61xZn0BB3SVCJ6gz',
-           title: 'Avengers',
-           released: 'Date here',
-           desc: '',
-           key: '1' 
+       uri: 'https://images-na.ssl-images-amazon.com/images/M/MV5BMTg1MTY2MjYzNV5BMl5BanBnXkFtZTgwMTc4NTMwNDI@._V1_SY500_CR0,0,337,500_AL_.jpg',
+       name: ' Black Panther',
+       released: '2018',
+       desc: "After the events of Captain America: Civil War, King T'Challa returns home to the reclusive, technologically advanced African nation of Wakanda to serve as his country's new leader. However, T'Challa soon finds that he is challenged for the throne from factions within his own country. When two foes conspire to destroy Wakanda, the hero known as Black Panther must team up with C.I.A. agent Everett K. Ross and members of the Dora Milaje, Wakandan special forces, to prevent Wakanda from being dragged into a world war.                Written by\nEditor",
+       duration: '134M',
+       imdbRating: 7.0,
       })
 
     const CarouselRef= useRef(null);
@@ -27,20 +31,24 @@ const Home = () => {
           setBackground({
             uri: item.image,
             name: item.title,
-            stat: item.released,
-            desc: item.desc
+            released: item.year,
+            desc: item.desc,
+            duration: item.duration,
+            imdbRating:item.imdbRating
           })
         }
         }
         >
           <Image source={{uri: item.image}} style={styles.CarouselImage}/>
           <Text style={styles.CarouselText}>{item.title}</Text>
-          <MaterialIcons name='library-add' size={25} color='white' style={styles.CarouselIcon}/>
         </TouchableOpacity>
         </View>
           )    }
 
   return (
+
+
+
     <ScrollView style={{backgroundColor: '#000'}}>
     <View style={styles.carouselContentContainer}>
         <View style={{...StyleSheet.absoluteFill, backgroundColor: '#000'}}>
@@ -51,7 +59,7 @@ const Home = () => {
                 >
                   <View style={styles.searchBoxContainer}>
                     <TextInput
-                   onPress={() => navigate('search')}
+                onFocus={() => navigation.navigate('Search')}
                     placeholder='Search movies'
                     placeholderTextColor='#666'
                     style={{...styles.SearchBox,width:700}}
@@ -77,7 +85,15 @@ const Home = () => {
                 <Text style={styles.movieName}>{background.name}</Text>
                 <Text style={styles.movieStat}>{background.stat}</Text>
               </View>
-              <TouchableOpacity style={styles.playIconContainer}>
+              <TouchableOpacity style={styles.playIconContainer} onPress={() => navigation.navigate('Watch', {
+                poster: background.uri,
+                moviename: background.name,
+                ryear: background.released,
+                mduration: background.duration,
+                storyline: background.desc,
+                ratings: background.imdbRating,
+                streamlink: 'https://youtu.be/vA_sCFYq_CM?list=RDvA_sCFYq_CM',
+              })}>
                 <FontAwesome5 name='play' size={22} color='#9b42f5' style={{marginLeft: 4}}/>
               </TouchableOpacity>
                </View>
@@ -101,29 +117,45 @@ data={list}
 horizontal={true}
 renderItem={({item}) =>{
   return(
-    <TouchableOpacity style={{marginRight: 20}}>
+    <TouchableOpacity style={{ marginRight: 20 }} onPress={() => navigation.navigate('Watch', {
+      poster: item.image,
+      moviename: item.title,
+      ryear: item.year,
+      mduration: item.duration,
+      storyline: item.desc,
+      ratings: item.imdbRating,
+      streamlink: 'https://youtu.be/vA_sCFYq_CM?list=RDvA_sCFYq_CM',
+    })}>
       <Image source={{uri: item.image}} style={{height: 150, width: 100}}/>
-    <View style={ {position: 'absolute', height: 5, width: '100%', backgroundColor: '#9b42f5', opacity: 0.8}}>       
+    <View style={ {position: 'absolute', height: 2, width: '100%', backgroundColor: '#9b42f5', opacity: 0.8}}>       
     </View>
-      <FontAwesome5 name='play' size={38} color='#fff' style={{ position: 'absolute', top: '40%', left: '40%', opacity: 0.9 }} />
+      
     </TouchableOpacity>
   )
 }
 }/>
 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, marginTop: 8, }}>
   <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold', marginLeft: 16 }} >Movies</Text>
-  <Text style={{ color: '#9b42f5', fontSize: 14, fontWeight: 'normal', marginRight: 16 }} >Explore{">>"}</Text>
+  <Text style={{ color: '#9b42f5', fontSize: 14, fontWeight: 'normal', marginRight: 16 }} onPress={()=>navigation.navigate('Movies')}>Explore{">>"}</Text>
 </View>
 <FlatList style={{ marginBottom: 8 }}
   data={list}
   horizontal={true}
   renderItem={({ item }) => {
     return (
-      <TouchableOpacity style={{ marginRight: 20 }}>
+      <TouchableOpacity style={{ marginRight: 20 }} onPress={() => navigation.navigate('Watch', {
+        poster: item.image,
+        moviename: item.title,
+        ryear: item.year,
+        mduration: item.duration,
+        storyline: item.desc,
+        ratings: item.imdbRating,
+        streamlink: 'https://youtu.be/vA_sCFYq_CM?list=RDvA_sCFYq_CM',
+      })}>
         <Image source={{ uri: item.image }} style={{ height: 150, width: 100 }} />
-        <View style={{ position: 'absolute', height: 5, width: '100%', backgroundColor: '#9b42f5', opacity: 0.8 }}>
+        <View style={{ position: 'absolute', height: 2, width: '100%', backgroundColor: '#9b42f5', opacity: 0.8 }}>
         </View>
-        <FontAwesome5 name='play' size={38} color='#fff' style={{ position: 'absolute', top: '40%', left: '40%', opacity: 0.9 }} />
+        
       </TouchableOpacity>
     )
   }
@@ -137,11 +169,19 @@ renderItem={({item}) =>{
         horizontal={true}
         renderItem={({ item }) => {
           return (
-            <TouchableOpacity style={{ marginRight: 20 }}>
+            <TouchableOpacity style={{ marginRight: 20 }} onPress={() => navigation.navigate('Watch', {
+              poster: item.image,
+              moviename: item.title,
+              ryear: item.year,
+              mduration: item.duration,
+              storyline: item.desc,
+              ratings: item.imdbRating,
+              streamlink: 'https://youtu.be/vA_sCFYq_CM?list=RDvA_sCFYq_CM',
+            })}>
               <Image source={{ uri: item.image }} style={{ height: 225, width: 150 }} />
-              <View style={{ position: 'absolute', height: 5, width: '100%', backgroundColor: '#9b42f5', opacity: 0.8 }}>
+              <View style={{ position: 'absolute', height: 2, width: '100%', backgroundColor: '#9b42f5', opacity: 0.8 }}>
               </View>
-              <FontAwesome5 name='play' size={38} color='#fff' style={{ position: 'absolute', top: '40%', left: '40%', opacity: 0.9 }} />
+              
             </TouchableOpacity>
           )
         }

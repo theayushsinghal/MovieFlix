@@ -1,11 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import Watch from './watch';
 
 const Recents = () => {
   return (
-    <View style={styles.container}>
-      <Text>This is recents.</Text>
-    </View>
+<Text>System</Text>
   );
 }
 

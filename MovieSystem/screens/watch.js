@@ -1,27 +1,43 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Dimensions, StatusBar, ImageBackground, TextInput, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Dimensions, StatusBar, ImageBackground, FlatList, Linking, ToastAndroid } from 'react-native';
 import React, { useRef, useState, useEffect } from 'react'
-import Carousel from 'react-native-anchor-carousel'
 import { Button } from 'react-native-paper';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import list from './data.js'
-let duration= "220m"
-let released= "2019"
+import { set } from 'react-native-reanimated';
 
-const Watch = () => {
-
+const Watch = ({ route, navigation}) => {
+    const {poster}=route.params;
+    const { moviename } = route.params;
+    const { mduration } = route.params;
+    const { ryear } = route.params;
+    const { storyline } = route.params;
+    const{ratings} = route.params;
+    const { streamlink } = route.params;
     return (
-        <ScrollView style={{ backgroundColor: '#000' }}>
+        <ScrollView style={{ backgroundColor: '#171717' }}>
                
                     <ImageBackground
-                        source={{ uri:'https://m.media-amazon.com/images/M/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_.jpg' }}
+                source={{ uri: poster}}
                         style={styles.ImageBg}
-                        blurRadius={2}>
+                        blurRadius={1}>
+                <LinearGradient
+                    colors={['#17171710', '#00000010', '#17171710', '#17171750', '#171717']}
+                    style={{
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        height: '100%'
+                    }}
+                />
                  </ImageBackground>
-                <Image source={{ uri: 'https://m.media-amazon.com/images/M/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_.jpg' }} style={{ height: 300, resizeMode: 'contain',marginTop:-220 }} />
-                <Button style={{alignSelf:'center',marginTop:30,borderRadius:20,padding:6}} labelStyle={{fontWeight:'bold'}} icon="play" mode='contained'  onPress={() => console.log('Pressed')}> Watch Now</Button>
-                <Text style={{color:'#fff',fontSize:25,fontWeight:'bold',alignSelf:'center',margin:10}}>Endgame</Text>
-            <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold', alignSelf: 'center' }}>{duration}{"       .       "}{released}</Text>
-            <Text style={{ color: '#fff', fontSize: 12, fontStyle: 'italic', alignSelf: 'center', margin: 10 }}>After the devastating events of Avengers: Infinity War (2018), the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.</Text>
+            <Image source={{ uri: poster }} style={{ height: 300, resizeMode: 'contain', marginTop: -280, borderRadius: 5}} />
+            <Button style={{ alignSelf: 'center', marginTop: 30, borderRadius: 20, padding: 5 }} labelStyle={{ fontWeight: 'bold' }} icon="play" mode='contained' onPress={() => {Linking.openURL(streamlink);
+                ToastAndroid.show("Abhi movie nahi daali le ye sun!", ToastAndroid.LONG);}}> Watch Now</Button>
+            <Text style={{ color: '#fff', fontSize: 25, fontWeight: 'bold', alignSelf: 'center', margin: 10 }}>{(moviename)}</Text>
+            <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold', alignSelf: 'center' }}>{"★ "}{ratings}{"    •    "}{mduration}{"    •    "}{ryear}</Text>
+            <Text style={{ color: '#fff', fontSize: 12, fontStyle: 'italic', alignSelf: 'center', margin: 10 }} numberOfLines={6} >{(storyline)}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, marginTop: 8, }}>
                 <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold', marginLeft: 16 }} >You May Also Like</Text>
             </View>
@@ -30,7 +46,15 @@ const Watch = () => {
                 horizontal={true}
                 renderItem={({ item }) => {
                     return (
-                        <TouchableOpacity style={{ marginRight: 20 }}>
+                        <TouchableOpacity style={{ marginRight: 20 }} onPress={() => navigation.navigate('Watch', {
+                            poster: item.image,
+                            moviename: item.title,
+                            ryear: item.year,
+                            mduration: item.duration,
+                            storyline: item.desc,
+                            ratings: item.imdbRating,
+                            streamlink: 'https://youtu.be/vA_sCFYq_CM?list=RDvA_sCFYq_CM',
+                        })}>
                             <Image source={{ uri: item.image }} style={{ height: 150, width: 100 }} />
                             <View style={{ position: 'absolute', height: 2, width: '100%', backgroundColor: '#9b42f5', opacity: 0.8 }}>
                             </View>
@@ -62,9 +86,9 @@ const styles = StyleSheet.create({
     ImageBg: {
 
         flex: 1,
-        height: 280,
+        height: 350,
         width: null,
-        opacity: 0.8,
+        opacity: 1,
         justifyContent: 'flex-start',
         borderRadius:10
     },

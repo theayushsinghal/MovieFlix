@@ -4,6 +4,9 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import {MaterialCommunityIcons} from '@expo/vector-icons'
+import { createStackNavigator } from '@react-navigation/stack';
+
+
 // import * as firebase from 'firebase';
 // import firebaseConfig from "./config.js";
 
@@ -22,8 +25,9 @@ import Watch from './screens/watch';
 // if (!firebase.apps.length) {
 //   firebase.initializeApp(firebaseConfig)
 // }
-
+const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
+
 const App = () => {
   // componentDidMount = () => {
   //   const MovieList = firebase.database().ref('item');
@@ -31,8 +35,30 @@ const App = () => {
   //     console.log(datasnap.val());
   //   })
   // }
+const createWatchstack=()=>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Screen name='Home' component={Home}/>
+    <Stack.Screen  name='Watch' component={Watch}/>
+  </Stack.Navigator>
+const createWatchMoviestack = () =>
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name='Movies' component={Movies} />
+    <Stack.Screen name='WatchMovie' component={Watch} />
+  </Stack.Navigator>
+  const createWatchTvstack = () =>
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='Tv' component={TvShows} />
+      <Stack.Screen name='WatchTv' component={Watch} />
+  </Stack.Navigator>
+  const createSearchWatchstack = () =>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='Search' component={Search} />
+      <Stack.Screen name='WatchSearch' component={Watch} />
+    </Stack.Navigator>
+
   return (
     <NavigationContainer>
+
        <Tab.Navigator
        initialRoute="Home"
         activeColor="#9b42f5"
@@ -43,19 +69,19 @@ const App = () => {
        >
       <Tab.Screen 
       name="Home" 
-      component={Home} 
+      children={createWatchstack} 
       options={{
-        tabBarLabel: 'Home',
+        tabBarLabel: '▲',
         tabBarIcon: ({color}) => (
-          <MaterialCommunityIcons name='home' color={color} size={25} />
+          <MaterialCommunityIcons name='home' color={color}  size={25} />
         )
       }}
       />
       <Tab.Screen 
       name="Movies" 
-      component={Movies} 
+      children={createWatchMoviestack} 
       options={{
-        tabBarLabel: 'Movies',
+        tabBarLabel: '▲',
         tabBarIcon: ({color}) => (
           <MaterialCommunityIcons name='movie' color={color} size={25} />
         )
@@ -63,29 +89,19 @@ const App = () => {
       />
       <Tab.Screen
         name="Tv Shows"
-        component={TvShows}
+        children={createWatchTvstack}
         options={{
-          tabBarLabel: 'Tv Shows',
+          tabBarLabel: '▲',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name='video-vintage' color={color} size={25} />
           )
         }}
       />
-      <Tab.Screen 
-      name="Recents" 
-      component={Watch} 
-      options={{
-        tabBarLabel: 'Profile',
-        tabBarIcon: ({color}) => (
-          <MaterialCommunityIcons name='account' color={color} size={25} />
-        )
-      }}
-      />
       <Tab.Screen
         name="Search"
-        component={Search}
+        children={createSearchWatchstack}
         options={{
-          tabBarLabel: 'Search',
+          tabBarLabel: '▲',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name='magnify' color={color} size={25} />
           )
